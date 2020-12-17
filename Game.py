@@ -1,5 +1,10 @@
 from tkinter import *
-from PIL import Image, ImageTk
+try:
+    from PIL import Image, ImageTk
+except ModuleNotFoundError:
+    import Image
+except:
+    print(f'Error: Could not import')
 import matplotlib
 import random
 
