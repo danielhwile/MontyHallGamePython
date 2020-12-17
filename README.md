@@ -5,4 +5,4 @@ This Game simulates the classic Monty Hall problem.  It utilizes TKINTER as a us
 
 ### Usage
 
-Simply Download the repo, and run game.py (Requires Python)
+Simply Download the repo, and run game.py (See Requirements.txt for PIP requirements.)
