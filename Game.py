@@ -5,8 +5,9 @@ except ModuleNotFoundError:
     import Image
 except:
     print(f'Error: Could not import')
-import matplotlib
+import matplotlib.pyplot as plt
 import random
+import csv
 
 def door_revealer(choice,win):
     '''This function helps decide which door is revealed to not be the winning door to our player.
@@ -209,11 +210,20 @@ class result_window(Frame):
         L5 = Label(self, text=win)
         L5.place(x=50, y=115)
 
+        self.graph = 0
         self.replay = 0
-        switch_door_no = Button(self, text="Replay?", command=self.client_replay)
-        switch_door_no.place(x=75, y=150)
+
+        replay = Button(self, text="Replay?", command=self.client_replay)
+        replay.place(x=75, y=135)
+
+        display_graphic = Button(self, text="Display Results Graphic", command=self.client_graph)
+        display_graphic.place(x=35, y=165)
     def client_replay(self):
         self.replay = 1
+        root.destroy()
+    def client_graph(self):
+        self.replay = 1
+        self.graph = 1
         root.destroy()
 
 
@@ -263,5 +273,48 @@ if __name__ == "__main__":
         root.geometry("200x200")
         result_window_var = result_window(root)
         root.mainloop()
+        data = []
+        with open('./Record/Records.csv', 'r') as c:
+            s = csv.reader(c, delimiter=',')
+            for row in s:
+                data.append(row)
+        if reveal_window_var.change == 'Yes':
+            data[-1][0] = int(data[-1][0])
+            data[-1][0] += 1
+        else:
+            data[-1][2] = int(data[-1][2])
+            data[-1][2] +=1
+        if reveal_window_var.change == 'Yes' and player_choice == winning_door:
+            data[-1][1] = int(data[-1][1])
+            data[-1][1] +=1
+        elif player_choice == winning_door:
+            data[-1][3] = int(data[-1][3])
+            data[-1][3] += 1
+        if result_window_var.graph == 1:
+            # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+            labels = 'Wins', 'Loses'
+            ax1data = []
+            ax1data.append(int(data[-1][1]))
+            ax1data.append((int(data[-1][0])-int(data[-1][1])))
+            ax2data = []
+            ax2data.append(int(data[-1][3]))
+            ax2data.append(int((data[-1][2]))-int(data[-1][3]))
+            explode = (0.1, 0)
+
+            fig, (ax1, ax2) = plt.subplots(1, 2)
+            ax1.pie(ax1data, colors=['g','r'],explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+            ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+            ax2.pie(ax2data, colors=['g','r'],explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+            ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+            ax1.set_title('Results With Changing Door')
+            ax2.set_title('Results Without Changing Door')
+            plt.show()
+        with open('./Record/Records.csv', 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(data[-1])
+
+
         if result_window_var.replay == 1:
             x = 1
