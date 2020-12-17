@@ -119,7 +119,7 @@ class reveal_window(Frame):
         self.pack(fill=BOTH, expand=1)
         self.change = None
 
-        L1 = Label(self, text="I'm a Nice guy! So as a Nice guy, I want to help you...\n I will show you one of the losing doors...")
+        L1 = Label(self, text="I'm a nice guy! So as a nice guy, I want to help you...\n I will show you one of the losing doors...")
         L1.place(x=5,y=5)
         L2 = Label(self, text="Door #"+str(reveal)+" Is not the winning door.")
         L2.place(x=60, y=45)
